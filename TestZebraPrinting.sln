@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36705.20 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestZebraPrinting", "TestZebraPrinting.csproj", "{EC940B9B-4641-4260-A43E-05D1C0599CFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Printing", "Printing\Printing.csproj", "{CE0CC264-B6C1-4BE2-B1DE-434D3FC3B86E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EC940B9B-4641-4260-A43E-05D1C0599CFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC940B9B-4641-4260-A43E-05D1C0599CFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC940B9B-4641-4260-A43E-05D1C0599CFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC940B9B-4641-4260-A43E-05D1C0599CFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE0CC264-B6C1-4BE2-B1DE-434D3FC3B86E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE0CC264-B6C1-4BE2-B1DE-434D3FC3B86E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE0CC264-B6C1-4BE2-B1DE-434D3FC3B86E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE0CC264-B6C1-4BE2-B1DE-434D3FC3B86E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C298FC04-A46D-499C-9A03-AF52D0B2D462}
+	EndGlobalSection
+EndGlobal
