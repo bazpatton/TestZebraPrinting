@@ -205,19 +205,5 @@ namespace TestZebraPrinting
                 TestConnectionButton.Enabled = true;
             }
         }
-
-        /// <summary>
-        /// Generate ZPL data for a label
-        /// </summary>
-        /// <param name="labelNumber">The number of the label</param>
-        /// <returns>The ZPL data for the label</returns>
-        private string GenerateZplData(int labelNumber)
-        {
-            // Example ZPL data generation - customize based on your needs
-            return $"^XA\n" +
-                   $"^FO50,50^A0N,36,36^FDLabel {labelNumber}^FS\n" +
-                   $"^FO50,100^BQN,2,4^FDMM,Label {labelNumber}^FS\n" +
-                   $"^XZ";
-        }
     }
 }

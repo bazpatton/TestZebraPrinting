@@ -6,7 +6,7 @@ using Zebra.Sdk.Comm;
 using Zebra.Sdk.Printer;
 
 namespace Printing
-{   
+{
     /// <summary>
     /// Class for the printing service
     /// </summary>
@@ -16,9 +16,19 @@ namespace Printing
         private IPrintLogger _printLogger;
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="printLogger">logger</param>
+        public PrintingService(IPrintLogger printLogger)
+        {
+            _printLogger = printLogger;
+        }
+
+        /// <summary>
         /// Event raised when confirmation is needed to proceed with bulk printing
         /// </summary>
         public event EventHandler<ProceedRequestEventArgs> ProceedRequested;
+
         public void Connect(string theIpAddress)
         {
             try
@@ -27,7 +37,7 @@ namespace Printing
                 _printerConnection.Open();
             }
             catch
-            (ConnectionException ex)
+            (ConnectionException)
             {
                 throw;
             }
@@ -50,13 +60,10 @@ namespace Printing
         /// <param name="data">The ZPL data to send</param>
         public void SendZplOverTcp(string data)
         {
-
             try
             {
                 if (IsPrinterReady())
                 {
-
-
                     // This example prints "This is a ZPL test." near the top of the label.
                     string zplData = $"^XA^FO20,20^A0N,25,25^FDThis is a {data} test.^FS^XZ";
 
@@ -68,7 +75,6 @@ namespace Printing
             {
                 // Handle communications error here.
                 _printLogger.AddMessage(e.ToString());
-
             }
             finally
             {
@@ -178,7 +184,7 @@ namespace Printing
                 catch (Exception ex)
                 {
                     _printLogger.AddMessage($"Error printing label {i}: {ex.Message}");
-                    
+
                     // Ask if user wants to continue after error
                     var errorProceedArgs = new ProceedRequestEventArgs
                     {

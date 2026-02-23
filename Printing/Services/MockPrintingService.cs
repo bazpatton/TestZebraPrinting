@@ -51,21 +51,28 @@ namespace Printing.Services
         /// <param name="theIpAddress">The IP address of the printer</param>
         public void Connect(string theIpAddress)
         {
-            if (_isDisposed)
+            try
             {
-                throw new InvalidOperationException("Service has been disposed");
-            }
+                if (_isDisposed)
+                {
+                    throw new InvalidOperationException("Service has been disposed");
+                }
 
-            // 10% chance of connection failure
-            if (_random.Next(1, 11) == 1) // 1 in 10 chance
+                // 10% chance of connection failure
+                if (_random.Next(1, 11) == 1) // 1 in 10 chance
+                {
+                    _printLogger.AddMessage($"Failed to connect to printer at {theIpAddress}: Connection refused");
+                    throw new ConnectionException($"Unable to connect to {theIpAddress}");
+                }
+
+                _ipAddress = theIpAddress;
+                _isConnected = true;
+                _printLogger.AddMessage($"Successfully connected to printer at {theIpAddress}");
+            }
+            catch
             {
-                _printLogger.AddMessage($"Failed to connect to printer at {theIpAddress}: Connection refused");
-                throw new ConnectionException($"Unable to connect to {theIpAddress}");
+                throw;
             }
-
-            _ipAddress = theIpAddress;
-            _isConnected = true;
-            _printLogger.AddMessage($"Successfully connected to printer at {theIpAddress}");
         }
 
         /// <summary>
@@ -92,51 +99,65 @@ namespace Printing.Services
         /// <returns>True if the printer is ready, false otherwise</returns>
         public bool IsPrinterReady(string message = "")
         {
-            if (_isDisposed)
+            try
             {
-                throw new InvalidOperationException("Service has been disposed");
-            }
 
-            if (!_isConnected)
-            {
-                message = "Not connected to printer";
-                _printLogger.AddMessage(message);
-                return false;
-            }
+                if (_isDisposed)
+                {
+                    throw new InvalidOperationException("Service has been disposed");
+                }
 
-            // 1 in 10 chance of returning false with random error
-            if (_random.Next(1, 11) == 1)
-            {
-                string error = _errorMessages[_random.Next(0, _errorMessages.Count)];
-                _printLogger.AddMessage($"Printer not ready: {error}");
-                message = error;
-                return false;
-            }
+                if (!_isConnected)
+                {
+                    message = "Not connected to printer";
+                    _printLogger.AddMessage(message);
+                    return false;
+                }
 
-            // 1 in 50 chance of throwing connection exception
-            if (_random.Next(1, 51) == 1)
+                // 1 in 10 chance of returning false with random error
+                if (_random.Next(1, 11) == 1)
+                {
+                    string error = _errorMessages[_random.Next(0, _errorMessages.Count)];
+                    _printLogger.AddMessage($"Printer not ready: {error}");
+                    message = error;
+                    return false;
+                }
+
+                // 1 in 50 chance of throwing connection exception
+                if (_random.Next(1, 51) == 1)
+                {   
+                    throw new ConnectionException("Connection lost");
+                }
+
+                // Simulate printer status check delay
+                Thread.Sleep(_random.Next(20, 100));
+
+                // 90% chance printer is ready
+                if (_random.Next(1, 11) <= 9) // 9 in 10 chance
+                {
+                    _printLogger.AddMessage("Ready To Print");
+                    return true;
+                }
+                else
+                {
+                    // Simulate various printer states
+                    string error = _errorMessages[_random.Next(0, _errorMessages.Count)];
+                    _printLogger.AddMessage($"Printer not ready: {error}");
+                    message = error;
+                    return false;
+                }
+            }
+            catch (ConnectionException)
             {
                 _printLogger.AddMessage("Connection lost while checking printer status");
-                throw new ConnectionException("Connection lost");
+            }
+            catch (Exception e)
+            {
+                _printLogger.AddMessage($"Error in SendZplOverTcp: {e}");
+                throw;
             }
 
-            // Simulate printer status check delay
-            Thread.Sleep(_random.Next(20, 100));
-
-            // 90% chance printer is ready
-            if (_random.Next(1, 11) <= 9) // 9 in 10 chance
-            {
-                _printLogger.AddMessage("Ready To Print");
-                return true;
-            }
-            else
-            {
-                // Simulate various printer states
-                string error = _errorMessages[_random.Next(0, _errorMessages.Count)];
-                _printLogger.AddMessage($"Printer not ready: {error}");
-                message = error;
-                return false;
-            }
+            return false;
         }
 
         /// <summary>
